@@ -1,0 +1,5 @@
+name: ChangeLogger
+version: ${project.version}
+main: de.alphahelix.changelogger.ChangeLogger
+depend: [AlphaLibary]
+authors: [AlphaHelix]
