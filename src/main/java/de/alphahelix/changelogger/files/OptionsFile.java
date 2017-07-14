@@ -11,6 +11,7 @@ public class OptionsFile extends SimpleFile {
     public void addValues() {
         setDefault("Inventory.title", "§6Changelogs");
         setDefault("Inventory.rows", 1);
+	    setDefault("Mysql", false);
     }
 
     public String getTitle() {
@@ -20,4 +21,8 @@ public class OptionsFile extends SimpleFile {
     public int getSize() {
         return getInt("Inventory.rows") * 9;
     }
+	
+	public boolean getMySQL () {
+		return getBoolean("Mysql");
+	}
 }

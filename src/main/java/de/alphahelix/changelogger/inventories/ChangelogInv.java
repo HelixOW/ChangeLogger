@@ -1,46 +1,42 @@
 package de.alphahelix.changelogger.inventories;
 
-import de.alphahelix.alphalibary.inventorys.InventoryBuilder;
+import de.alphahelix.alphalibary.menus.Menu;
+import de.alphahelix.alphalibary.menus.MenuElement;
 import de.alphahelix.changelogger.ChangeLogger;
 import de.alphahelix.changelogger.instances.ChangeLog;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.inventory.Inventory;
-
-import java.util.ArrayList;
+import org.bukkit.inventory.ItemStack;
 
 public class ChangelogInv {
-
-    private static Inventory i;
+    
+    private static Menu menu;
 
     public static void fillInventory() {
-        InventoryBuilder ib = new InventoryBuilder(ChangeLogger.getOptionsFile().getTitle(), ChangeLogger.getOptionsFile().getSize()) {
-            @Override
-            public void onOpen(InventoryOpenEvent e) {}
-
-            @Override
-            public void onClose(InventoryCloseEvent e) {}
-        };
-
-        ArrayList<ChangeLog> logs = ChangeLogger.getChangelogFile().getLogEntries();
-
-        for(ChangeLog log : logs) {
-            ib.addItem(new InventoryBuilder.SimpleItem(log.getIcon(), logs.indexOf(log)) {
+    
+        menu = new Menu(ChangeLogger.getOptionsFile().getTitle(), ChangeLogger.getOptionsFile().getSize());
+    
+        ChangeLog[] logs = ChangeLogger.getChangelogFile().getLogEntries();
+    
+        for(int i = 0; i < logs.length; i++) {
+            int finalI = i;
+            menu.addElement(i, new MenuElement() {
                 @Override
-                public void onClick(InventoryClickEvent inventoryClickEvent) {
+                public ItemStack getIcon (Player player) {
+                    return logs[finalI].getIcon();
+                }
+            
+                @Override
+                public void click (InventoryClickEvent inventoryClickEvent) {
                     inventoryClickEvent.setCancelled(true);
                 }
             });
         }
-
-        i = ib.build();
     }
 
     public static void openInventory(Player p) {
-        if(i == null) return;
-
-        p.openInventory(i);
+        if(menu == null) return;
+    
+        menu.open(p);
     }
 }
